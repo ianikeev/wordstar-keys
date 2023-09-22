@@ -4,7 +4,7 @@
 ; or put it in the windows startup folder to run it on startup
 ; Makes CapsLock act like WordStar 'Ctrl', but leaves Ctrl alone
 
-#MaxHotkeysPerInterval 150  ; keyboard repeat can be bigger than this otherwise
+#MaxHotkeysPerInterval 150 ; keyboard repeat can be bigger than this otherwise
 
 ; -------------------------------
 ; Define window classes for special e.g. MS Office key overrides down below
@@ -12,7 +12,7 @@
 GroupAdd,MSWord,ahk_class OpusApp		; Word
 
 GroupAdd,MSOffice,ahk_group MSWord
-GroupAdd,MSOffice,ahk_class XLMAIN  		; Excel 2007
+GroupAdd,MSOffice,ahk_class XLMAIN 		; Excel 2007
 
 GroupAdd,WordProcessors,ahk_group MSWord
 
@@ -34,8 +34,7 @@ GroupAdd,Chrome,ahk_class Chrome_WidgetWin_1,,,Google Drive
 SetCapsLockState,AlwaysOff
 Menu, TRAY, Icon,%ProgramFiles%\AutoHotkey\AutoHotkey.exe,2,1
 ;#NoTrayIcon  ; include if you don't want an icon in the tray
-SetTitleMatchMode, 2  ; match anywhere in title
-
+SetTitleMatchMode, 2 ; match anywhere in title
 
 ; Make shift-capslock act like the old capslock
 ;+CapsLock::
@@ -47,14 +46,13 @@ SetTitleMatchMode, 2  ; match anywhere in title
 ;return
 
 ; Also make RAlt act like the old capslock
-RAlt::
-  GetKeyState,caps,CapsLock,T
-  if caps = D
-    SetCapsLockState,AlwaysOff
-  else
-    SetCapsLockState,AlwaysOn
-return
-
+; RAlt::
+;   GetKeyState,caps,CapsLock,T
+;   if caps = D
+;     SetCapsLockState,AlwaysOff
+;   else
+;     SetCapsLockState,AlwaysOn
+; return
 
 ; -------------------------------
 ;Find-Windows that get auto-closed when you push <Enter>
@@ -63,27 +61,24 @@ GroupAdd,FindWindow,Find ahk_class bosa_sdm_Microsoft Office Word 12.0	; Word 20
 GroupAdd,FindWindow,Find ahk_class #32770				; Notepad find window
 
 #IfWinActive ahk_group FindWindow		; one of the find windows
-$Enter::
-  Send {Enter}{Esc}		                ; Escape out of find window
-return
-
-
+  $Enter::
+    Send {Enter}{Esc}		 ; Escape out of find window
+  return
 
 ; -------------------------------
 ; NOTE: Put exceptions to wordstar keys under specific apps below, but above main wordstar settings at EOF
 ; -------------------------------
-
 
 ; -------------------------------
 ; For Google Chrome except Google Drive
 ; -------------------------------
 
 #IfWinActive ahk_group Chrome
-CapsLock & BS::
-  Send ^+{Right}{Del}  ; Delete word right
-  k1 =
-  Marking =
-return
+  CapsLock & BS::
+    Send ^+{Right}{Del} ; Delete word right
+    k1 =
+    Marking =
+  return
 
 ; -------------------------------
 ; For SciTE
@@ -91,109 +86,105 @@ return
 
 #ifWinActive SciTE
 
-F3::^o
+  F3::^o
 
-XButton1::Send ^{F3}
-XButton2::Send ^+{F3}
+  XButton1::Send ^{F3}
+  XButton2::Send ^+{F3}
 
-CapsLock & w::
-  Send ^{Up}
-return
+  CapsLock & w::
+    Send ^{Up}
+  return
 
-CapsLock & z::
-  Send ^{Down}
-return
+  CapsLock & z::
+    Send ^{Down}
+  return
 
-!x::
-  ; exit all windows
-  Send ^w  ; Window close
-return
+  !x::
+    ; exit all windows
+    Send ^w ; Window close
+  return
 
-!n::Send !n
-!p::Send !p
+  !n::Send !n
+  !p::Send !p
 
-^q::Send ^q
+  ^q::Send ^q
 
-CapsLock & j::
-  if A_PriorHotKey = CapsLock & q
-    Send ^g
-  else if k1
+  CapsLock & j::
+    if A_PriorHotKey = CapsLock & q
+      Send ^g
+    else if k1
     {
-    Send {F2}
-    k1 =
+      Send {F2}
+      k1 =
     }
-return
+  return
 
-; Ctrl+h does backspace and ^k^h remove marking
-CapsLock & m::
-  if k1
+  ; Ctrl+h does backspace and ^k^h remove marking
+  CapsLock & m::
+    if k1
     {
-    Send ^{F2}
-    k1 =
+      Send ^{F2}
+      k1 =
     }
-return
+  return
 
-CapsLock & d::
-  if k1
+  CapsLock & d::
+    if k1
     {
-      Send ^c{Right}  ; Duplicate selection
+      Send ^c{Right} ; Duplicate selection
       Marking =
     }
-  else if A_PriorHotKey = CapsLock & q
+    else if A_PriorHotKey = CapsLock & q
     {
-    if Marking
-      Send +{End}  ; Extend selection end of line
-    else
-      Send {End}  ; End of line
+      if Marking
+        Send +{End} ; Extend selection end of line
+      else
+        Send {End} ; End of line
     }
-  else if Marking
-    Send +{Right}  ; Extend selection right
-  else
-    Send {Right}  ; Char right
-  k1 =
-return
-
+    else if Marking
+      Send +{Right} ; Extend selection right
+    else
+      Send {Right} ; Char right
+    k1 =
+  return
 
 ; -------------------------------
 ; For FE, just translate CapsLock to Ctrl
 ; -------------------------------
 #IfWinActive Edit ahk_class ConsoleWindowClass
-$*CapsLock::Send {LControl Down}
-$*CapsLock Up::Send {LControl Up}
-
+  $*CapsLock::Send {LControl Down}
+  $*CapsLock Up::Send {LControl Up}
 
 ; -------------------------------
 ; Cmd.exe
 ; -------------------------------
 #IfWinActive ahk_class ConsoleWindowClass
 
-sendn(key, times) {
-  Loop %times% {
-    Send %key%
+  sendn(key, times) {
+    Loop %times% {
+      Send %key%
+    }
   }
-}
 
-; Scroll page up
-+PgUp::
-  sendn("{WheelUp}", 25)
-return
+  ; Scroll page up
+  +PgUp::
+    sendn("{WheelUp}", 25)
+  return
 
-; Scroll page down
-+PgDn::
-  sendn("{WheelDown}", 25)
-return
-
+  ; Scroll page down
+  +PgDn::
+    sendn("{WheelDown}", 25)
+  return
 
 ; -------------------------------
 ; Notepad
 ; -------------------------------
 
 #IfWinActive ahk_class Notepad
-CapsLock & j::
-  if A_PriorHotKey = CapsLock & q
-    Send ^g
-return
-
+  CapsLock & j::
+    if A_PriorHotKey = CapsLock & q
+      Send ^g
+  return
 
 ; -------------------------------
 ; OpenOffice.org key mapping
@@ -203,149 +194,148 @@ return
 ;  ^+0 -> Text body paragraph style
 ; -------------------------------
 
-#IfWinActive ahk_class SALFRAME  ; OpenOffice.org
+#IfWinActive ahk_class SALFRAME ; OpenOffice.org
 
-; caps-b=bold; caps-kb begins marking
-CapsLock & b::
-  {
-  if k1
+  ; caps-b=bold; caps-kb begins marking
+  CapsLock & b::
     {
-    Marking = 1
-    k1 =
+      if k1
+      {
+        Marking = 1
+        k1 =
+      }
+      else
+        Send ^b{Esc} ; Bold
     }
-  else
-    Send ^b{Esc}  ; Bold
-  }
-return
+  return
 
-!b::
-  Send ^+0{Esc}  ; Text body style
-  k1 =
-  Marking =
-return
-
-; Ctrl+h does backspace and ^k^h remove marking
-CapsLock & h::
-  if k1
-    {
-    Marking =
-    Send {Left}{Right}{Esc}	; Esc is for open office
-    k1 =
-    }
-return
-
-CapsLock & l::
-  Send ^+F  ; Repeat search
-  k1 =
-  Marking =
-return
-
-; Increment leading
-!l::
-; There is probably a faster way to do this
-  Send {Esc}^+o
-  MouseGetPos xcur, ycur
-  MouseMove 66, 36, 0
-  Sleep 10
-  Click
-  Send ^{Tab}
-  MouseMove 64, 53, 0
-  Click
-  MouseMove 342, 239, 0
-  Click
-  Click
-  MouseMove xcur, ycur, 0
-  Send {Enter}
-  k1 =
-  Marking =
-return
-
-; Decrement leading
-!+l::
-; There is probably a faster way to do this
-  Send {Esc}^+o
-  MouseGetPos xcur, ycur
-  MouseMove 66, 36, 0
-  Click
-  Send ^{Tab}
-  MouseMove 64, 53, 0
-  Click
-  MouseMove 342, 247, 0
-  Click
-  Click
-  MouseMove xcur, ycur, 0
-  Send {Enter}
-  k1 =
-  Marking =
-return
-
-CapsLock & m::
-  Send {F2}
-return
-
-CapsLock & n::
-  Send {Esc}{Enter}{Home}{Left}  ; New line	; Esc for open office; Home is for auto-indent editors
-  k1 =
-return
-
-!n::
-  Send ^0{Esc}  ; Default or normal style
-  k1 =
-  Marking =
-return
-
-CapsLock & t::
-  if GetKeyState("Shift") {
-    Send !e!g!r
-  } else {
-    Send {F4}!o!a!f-1.27{Enter}  ; Hanging indent
+  !b::
+    Send ^+0{Esc} ; Text body style
     k1 =
     Marking =
-  }
-return
+  return
 
-Capslock & u::
-  Send ^z  ; Undo
-  k1 =
-  Marking =
-return
-
-; exit all OOo windows
-!x::
-  Send ^q
-  k1 =
-return
-
-CapsLock & y::
-  if k1
+  ; Ctrl+h does backspace and ^k^h remove marking
+  CapsLock & h::
+    if k1
     {
-    Send +{Del}  ; Edit cut
-    Marking =
+      Marking =
+      Send {Left}{Right}{Esc}	; Esc is for open office
+      k1 =
     }
-  else
-  {
-    saveclip := ClipboardAll
-    Clipboard =
-    Send +{End}+{Del}	; Select to eol
-    Sleep, 40		; Wait for data to enter clipboard
-    if not Clipboard
-      Send +{Right}{Del}	; For some reason just {Del} doesn't do it
-    Clipboard := saveclip
-  }
-  k1 =
-  Marking =
-return
+  return
 
-$Esc::
-  if Marking
+  CapsLock & l::
+    Send ^+F ; Repeat search
+    k1 =
+    Marking =
+  return
+
+  ; Increment leading
+  !l::
+    ; There is probably a faster way to do this
+    Send {Esc}^+o
+    MouseGetPos xcur, ycur
+    MouseMove 66, 36, 0
+    Sleep 10
+    Click
+    Send ^{Tab}
+    MouseMove 64, 53, 0
+    Click
+    MouseMove 342, 239, 0
+    Click
+    Click
+    MouseMove xcur, ycur, 0
+    Send {Enter}
+    k1 =
+    Marking =
+  return
+
+  ; Decrement leading
+  !+l::
+    ; There is probably a faster way to do this
+    Send {Esc}^+o
+    MouseGetPos xcur, ycur
+    MouseMove 66, 36, 0
+    Click
+    Send ^{Tab}
+    MouseMove 64, 53, 0
+    Click
+    MouseMove 342, 247, 0
+    Click
+    Click
+    MouseMove xcur, ycur, 0
+    Send {Enter}
+    k1 =
+    Marking =
+  return
+
+  CapsLock & m::
+    Send {F2}
+  return
+
+  CapsLock & n::
+    Send {Esc}{Enter}{Home}{Left} ; New line	; Esc for open office; Home is for auto-indent editors
+    k1 =
+  return
+
+  !n::
+    Send ^0{Esc} ; Default or normal style
+    k1 =
+    Marking =
+  return
+
+  CapsLock & t::
+    if GetKeyState("Shift") {
+      Send !e!g!r
+    } else {
+      Send {F4}!o!a!f-1.27{Enter} ; Hanging indent
+      k1 =
+      Marking =
+    }
+  return
+
+  Capslock & u::
+    Send ^z ; Undo
+    k1 =
+    Marking =
+  return
+
+  ; exit all OOo windows
+  !x::
+    Send ^q
+    k1 =
+  return
+
+  CapsLock & y::
+    if k1
     {
-    Marking =
-    Send {Esc}		;Esc for open office
+      Send +{Del} ; Edit cut
+      Marking =
     }
-else
-    Send {Esc}
-return
+    else
+    {
+      saveclip := ClipboardAll
+      Clipboard =
+      Send +{End}+{Del}	; Select to eol
+      Sleep, 40		; Wait for data to enter clipboard
+      if not Clipboard
+        Send +{Right}{Del}	; For some reason just {Del} doesn't do it
+      Clipboard := saveclip
+    }
+    k1 =
+    Marking =
+  return
 
+  $Esc::
+    if Marking
+    {
+      Marking =
+      Send {Esc}		;Esc for open office
+    }
+    else
+      Send {Esc}
+  return
 
 ; -------------------------------
 ; Eclipse IDE
@@ -353,42 +343,41 @@ return
 
 #IfWinActive ahk_group Eclipse
 
-CapsLock & d::
-  if k1
+  CapsLock & d::
+    if k1
     {
       Send ^c{Right}
       Marking =
     }
-  else if A_PriorHotKey = CapsLock & q
+    else if A_PriorHotKey = CapsLock & q
     {
-    if Marking
-      Send +{End}  ; Extend selection end of line
-    else
-      Send {End}   ; End of line
+      if Marking
+        Send +{End} ; Extend selection end of line
+      else
+        Send {End} ; End of line
     }
-  else if Marking
-    Send +{Right}  ; Extend selection right
-  else
-    Send {Right}   ; Char right
-  k1 =
-return
+    else if Marking
+      Send +{Right} ; Extend selection right
+    else
+      Send {Right} ; Char right
+    k1 =
+  return
 
-CapsLock & l::
-  Send ^k
-  k1 =
-  Marking =
-return
-
-$!p:: Send {Alt Down}p
-
-$Esc::
-  if Marking {
+  CapsLock & l::
+    Send ^k
+    k1 =
     Marking =
-    Send {Right}{Esc}
-  } else
-    Send {Esc}
-return
+  return
 
+  $!p:: Send {Alt Down}p
+
+  $Esc::
+    if Marking {
+      Marking =
+      Send {Right}{Esc}
+    } else
+      Send {Esc}
+  return
 
 ; -------------------------------
 ; Putty (nano)
@@ -396,173 +385,171 @@ return
 
 #IfWinActive ahk_group Unix
 
-F3::Send {F5}
+  F3::Send {F5}
 
-CapsLock & a::
-  if A_PriorHotKey = CapsLock & q
-    Send !r
-  else
-    Send !{Space}
-return
-
-; caps-b begins marking
-CapsLock & b::
-  if k1 {
-    Send !a
-    k1 =
-  }
-return
-
-CapsLock & c::
-  if A_PriorHotKey = CapsLock & q
-    Send !g100000{Enter}
-  else if k1
-    Send ^k
-  else
-    Send {PgDn}
-  k1 =
-return
-
-CapsLock & d::
-  if A_PriorHotKey = CapsLock & q
-    Send {End}  ; End of line
-  else if k1
-    Send ^k^u
-  else
-    Send {Right}  ; Char right
-  k1 =
-return
-
-CapsLock & f::
-  if A_PriorHotKey = CapsLock & q
-    Send ^w
-  else
-    Send ^{Space}
-return
-
-CapsLock & h::
-  if k1
-    Send !a
-  else
-    Send ^h
-  k1 =
-return
-
-CapsLock & i::
-  if k1
-    Send !{}}
-  else
-    Send ^i
-  k1 =
-return
-
-CapsLock & k::
-  if k1 {
-    Send !a
-    k1 =
-  } else {
-    k1 = 1
-  }
-return
-
-CapsLock & r::
-  if A_PriorHotKey = CapsLock & q
-    Send !g1{Enter}
-  else if k1
-    Send ^R
-  else
-    Send {PgUp}
-  k1 =
-return
-
-CapsLock & s::
-  if k1
-    Send ^o{Enter}  ; File save
-  else if A_PriorHotKey = CapsLock & q
-    {
-    if Marking
-      Send +{Home}  ; Extend selection start of line
+  CapsLock & a::
+    if A_PriorHotKey = CapsLock & q
+      Send !r
     else
-      Send {Home}  ; Start of line
+      Send !{Space}
+  return
+
+  ; caps-b begins marking
+  CapsLock & b::
+    if k1 {
+      Send !a
+      k1 =
     }
-  else if Marking
-    send +{Left}  ; Extend selection left
-  else
-    Send {Left}  ; Char left
-  k1 =
-return
+  return
 
-CapsLock & j::
-  if A_PriorHotKey = CapsLock & q
-    Send !g
-return
+  CapsLock & c::
+    if A_PriorHotKey = CapsLock & q
+      Send !g100000{Enter}
+    else if k1
+      Send ^k
+    else
+      Send {PgDn}
+    k1 =
+  return
 
-CapsLock & l::
-  Send ^w{Enter}
-return
+  CapsLock & d::
+    if A_PriorHotKey = CapsLock & q
+      Send {End} ; End of line
+    else if k1
+      Send ^k^u
+    else
+      Send {Right} ; Char right
+    k1 =
+  return
 
-CapsLock & p::
-  if k1
-    Send ^u
-  k1 =
-return
+  CapsLock & f::
+    if A_PriorHotKey = CapsLock & q
+      Send ^w
+    else
+      Send ^{Space}
+  return
 
-CapsLock & u::
-  if k1
-    Send !{{}
-  else
-    Send ^u
-  k1 =
-return
+  CapsLock & h::
+    if k1
+      Send !a
+    else
+      Send ^h
+    k1 =
+  return
 
-CapsLock & w::
-  Send !_{Down}
-return
+  CapsLock & i::
+    if k1
+      Send !{}}
+    else
+      Send ^i
+    k1 =
+  return
 
-CapsLock & y::
-  if A_PriorHotKey = CapsLock & q
-    Send !a{End}^k
-  else if k1
-    Send ^k
-  else
-    Send !a{End}{Right}^k
-return
+  CapsLock & k::
+    if k1 {
+      Send !a
+      k1 =
+    } else {
+      k1 = 1
+    }
+  return
 
-CapsLock & z::
-  Send !+={Up}
-return
+  CapsLock & r::
+    if A_PriorHotKey = CapsLock & q
+      Send !g1{Enter}
+    else if k1
+      Send ^R
+    else
+      Send {PgUp}
+    k1 =
+  return
 
-; open file (have to then push alt-m to open in a new buffer -- no way to switch automatically once for all
-^o::
-  Send ^r
-return
+  CapsLock & s::
+    if k1
+      Send ^o{Enter} ; File save
+    else if A_PriorHotKey = CapsLock & q
+    {
+      if Marking
+        Send +{Home} ; Extend selection start of line
+      else
+        Send {Home} ; Start of line
+    }
+    else if Marking
+      send +{Left} ; Extend selection left
+    else
+      Send {Left} ; Char left
+    k1 =
+  return
 
-^s::
-  Send ^o{Enter}
-return
+  CapsLock & j::
+    if A_PriorHotKey = CapsLock & q
+      Send !g
+  return
 
-!n::
-  Send !.
-return
+  CapsLock & l::
+    Send ^w{Enter}
+  return
 
-!x::
-  Send ^xy{Enter}
-return
+  CapsLock & p::
+    if k1
+      Send ^u
+    k1 =
+  return
 
-!q::
-  Send ^xn{BS}
-return
+  CapsLock & u::
+    if k1
+      Send !{{}
+    else
+      Send ^u
+    k1 =
+  return
 
+  CapsLock & w::
+    Send !_{Down}
+  return
+
+  CapsLock & y::
+    if A_PriorHotKey = CapsLock & q
+      Send !a{End}^k
+    else if k1
+      Send ^k
+    else
+      Send !a{End}{Right}^k
+  return
+
+  CapsLock & z::
+    Send !+={Up}
+  return
+
+  ; open file (have to then push alt-m to open in a new buffer -- no way to switch automatically once for all
+  ^o::
+    Send ^r
+  return
+
+  ^s::
+    Send ^o{Enter}
+  return
+
+  !n::
+    Send !.
+  return
+
+  !x::
+    Send ^xy{Enter}
+  return
+
+  !q::
+    Send ^xn{BS}
+  return
 
 ; -------------------------------
 ; Notepad
 ; -------------------------------
 
 #IfWinActive Find ahk_class #32770		; Notepad find window
-$Enter::
-  Send {Enter}{Esc}		                ; Escape out of find window
-return
-
+  $Enter::
+    Send {Enter}{Esc}		 ; Escape out of find window
+  return
 
 ; -------------------------------
 ; Microsoft Office - MS Office
@@ -570,12 +557,11 @@ return
 
 #IfWinActive ahk_group MSOffice
 
-CapsLock & l::
-  Send +{F4}
-  k1 =
-  Marking =
-return
-
+  CapsLock & l::
+    Send +{F4}
+    k1 =
+    Marking =
+  return
 
 ; -------------------------------
 ; Word processors (they act slightly differently to text editors)
@@ -583,35 +569,34 @@ return
 
 #ifWinActive ahk_group WordProcessors
 
-CapsLock & d::
-  if k1
+  CapsLock & d::
+    if k1
     {
-      Send ^c{Left}{Right}  ; Duplicate selection
+      Send ^c{Left}{Right} ; Duplicate selection
       Marking =
     }
-  else if A_PriorHotKey = CapsLock & q
+    else if A_PriorHotKey = CapsLock & q
     {
-    if Marking
-      Send +{End}+{Left}  ; Extend selection end of line
-    else
-      Send {End}  ; End of line
+      if Marking
+        Send +{End}+{Left} ; Extend selection end of line
+      else
+        Send {End} ; End of line
     }
-  else if Marking
-    Send +{Right}  ; Extend selection right
-  else
-    Send {Right}  ; Char right
-  k1 =
-return
+    else if Marking
+      Send +{Right} ; Extend selection right
+    else
+      Send {Right} ; Char right
+    k1 =
+  return
 
-CapsLock & y::
-  if k1
-    Send {Home}+{End}{Del}  ; Delete line
-  else
-    Send +{End}+{Left}{Del}  ; Delete to eol
-  k1 =
-  Marking =
-return
-
+  CapsLock & y::
+    if k1
+      Send {Home}+{End}{Del} ; Delete line
+    else
+      Send +{End}+{Left}{Del} ; Delete to eol
+    k1 =
+    Marking =
+  return
 
 ; -------------------------------
 ; Kicad
@@ -619,8 +604,7 @@ return
 
 #ifWinActive ahk_group kicad
 
-CapsLock & l::Send ^f{Enter}{Esc}
-
+  CapsLock & l::Send ^f{Enter}{Esc}
 
 ; -------------------------------
 ; Generic Wordstar key mapping
@@ -630,296 +614,304 @@ CapsLock & l::Send ^f{Enter}{Esc}
 ;#IfWinActive						; For everything else
 #IfWinNotActive Edit ahk_class ConsoleWindowClass	; For everything except FE
 
-CapsLock & a::
-  if k1
-    {
-    Send ^a  ; Select all
-    Marking = 1
-    }
-  else if A_PriorHotKey = CapsLock & q
-    Send ^h        ; Replace
-  else if Marking
-    Send ^+{Left}  ; Extend selection word left
-  else
-    Send ^{Left}   ; Word left
-  k1 =
-return
-
-; caps-b=bold; caps-kb begins marking
-CapsLock & b::
-  {
-  if k1
-    {
-    Marking = 1
-    k1 =
-    }
-  else
-    Send ^b
-  }
-return
-
-CapsLock & c::
-  if k1
-    {
-    Send +{Del}  ; Edit cut
-    Marking =
-    }
-  else if A_PriorHotKey = CapsLock & q
-    {
-    if Marking
-      Send ^+{End}  ; Extend selection end of document
-    else
-      Send ^{End}  ; End of document
-    }
-  else if Marking
-    Send +{PgDn}
-  else
-    Send {PgDn}  ; Page down
-  k1 =
-return
-
-CapsLock & d::
-  if k1
-    {
-      Send ^c{Left}{Right}  ; Duplicate selection
-      Marking =
-    }
-  else if A_PriorHotKey = CapsLock & q
-    {
-    if Marking
-      Send +{End}  ; Extend selection end of line
-    else
-      Send {End}  ; End of line
-    }
-  else if Marking
-    Send +{Right}  ; Extend selection right
-  else
-    Send {Right}  ; Char right
-  k1 =
-return
-
-CapsLock & e::
-  if A_PriorHotKey = CapsLock & q
-    if Marking
-      Send +^{Up}  ; Extend selection line up
-    else
-      Send ^{Up}  ; Line up
-  else if Marking
-      Send +{Up}  ; Extend selection line up
-  else
-    Send {Up}  ; Line up
-  k1 =
-return
-
-CapsLock & f::
-  if A_PriorHotKey = CapsLock & q
-    {
-    Send ^f  ; Edit find
-    Marking =
-    }
-  else if Marking
-    Send ^+{Right}  ; Extend selection word right
-  else
-    Send ^{Right}  ; Word right
-  k1 =
-return
-
-CapsLock & g::
-  Send {Del}  ; Delete char right
-  k1 =
-  Marking =
-return
-
-; Ctrl+h does backspace and ^k^h remove marking
-CapsLock & h::
-  if k1
-    {
-    Marking =
-    Send {Right}
-    k1 =
-    }
-return
-
-CapsLock & i::Send ^i
-
-; Ctrl+k prefix, ^k^k toggles marking
-CapsLock & k::
-  if Marking
-    {
+  CapsLock & a::
     if k1
-      {
-      Marking =
-      Send {Left}{Right}
-      k1 =
-      }
-    else
-      k1 = 1
-    }
-  else
     {
-    if k1
-      {
+      Send ^a ; Select all
       Marking = 1
-      k1 =
+    }
+    else if A_PriorHotKey = CapsLock & q
+      Send ^h ; Replace
+    else if Marking
+      Send ^+{Left} ; Extend selection word left
+    else
+      Send ^{Left} ; Word left
+    k1 =
+  return
+
+  ; caps-b=bold; caps-kb begins marking
+  CapsLock & b::
+    {
+      if k1
+      {
+        Marking = 1
+        k1 =
       }
-    else
-      k1 = 1
+      else
+        Send ^b
     }
-return
+  return
 
-CapsLock & l::
-  if GetKeyState("Shift") {
-    Send +{F3}   ; Find previous
-  } else {
-    Send {F3}    ; Find again
-  }
-  k1 =
-  Marking =
-return
-
-CapsLock & n::
-  Send {Enter}{Home}{Left}  ; New line	; Home is for auto-indent editors
-  k1 =
-return
-
-; next previous window
-!p::Send +^{Tab}
-
-CapsLock & p::
-  if k1
-    Send +{Ins}  ; Edit paste
-  else
-    Send ^p  ; Print
-  k1 =
-return
-
-; dummy hotkey so that A_PriorHotKey can detect it
-CapsLock & q::
-return
-
-CapsLock & r::
-  if A_PriorHotKey = CapsLock & q
+  CapsLock & c::
+    if k1
     {
-    if Marking
-      Send ^+{Home}  ; Extend selection start of document
-    else
-      Send ^{Home}  ; Start of document
+      Send +{Del} ; Edit cut
+      Marking =
     }
-  else if Marking
-    Send +{PgUp}  ; Extend selection page up
-  else
-    Send {PgUp}  ; Page up
-  k1 =
-return
-
-CapsLock & s::
-  if k1
-    Send ^s  ; File save
-  else if A_PriorHotKey = CapsLock & q
+    else if A_PriorHotKey = CapsLock & q
     {
-    if Marking
-      Send +{Home}  ; Extend selection start of line
-    else
-      Send {Home}  ; Start of line
+      if Marking
+        Send ^+{End} ; Extend selection end of document
+      else
+        Send ^{End} ; End of document
     }
-  else if Marking
-    send +{Left}  ; Extend selection left
-  else
-    Send {Left}  ; Char left
-  k1 =
-return
-
-CapsLock & t::
-  Send ^+{Right}{Del}  ; Delete word right
-  k1 =
-  Marking =
-return
-
-Capslock & u::
-  Send ^z  ; Undo
-  k1 =
-  Marking =
-return
-
-CapsLock & BS::
-  Send ^+{Right}{Del}  ; Delete word right
-  k1 =
-  Marking =
-return
-
-CapsLock & w::
-  Send {WheelUp}  ; Scroll down
-  k1 =
-return
-
-CapsLock & x::
-  if k1 {
-;     Send !{F4}  ; Window close
-  } else if A_PriorHotKey = CapsLock & q
-    if Marking
-      Send +^{Down}  ; Extend selection line down
+    else if Marking
+      Send +{PgDn}
     else
-      Send ^{Down}  ; Bottom of file
-  else if Marking
-    Send +{Down}  ; Extend selection line down
-  else
-    Send {Down}  ; Bottom of file
-  k1 =
-return
+      Send {PgDn} ; Page down
+    k1 =
+  return
 
-; exit all windows
-!x::
-  Send !{F4}  ; Window close
-  k1 =
-return
-
-CapsLock & y::
-  if k1
+  CapsLock & d::
+    if k1
     {
-    Send +{Del}  ; Edit cut
+      Send ^c{Left}{Right} ; Duplicate selection
+      Marking =
+    }
+    else if A_PriorHotKey = CapsLock & q
+    {
+      if Marking
+        Send +{End} ; Extend selection end of line
+      else
+        Send {End} ; End of line
+    }
+    else if Marking
+      Send +{Right} ; Extend selection right
+    else
+      Send {Right} ; Char right
+    k1 =
+  return
+
+  CapsLock & e::
+    if A_PriorHotKey = CapsLock & q
+      if Marking
+        Send +^{Up} ; Extend selection line up
+      else
+        Send ^{Up} ; Line up
+    else if Marking
+      Send +{Up} ; Extend selection line up
+    else
+      Send {Up} ; Line up
+    k1 =
+  return
+
+  CapsLock & f::
+    if A_PriorHotKey = CapsLock & q
+    {
+      Send ^f ; Edit find
+      Marking =
+    }
+    else if Marking
+      Send ^+{Right} ; Extend selection word right
+    else
+      Send ^{Right} ; Word right
+    k1 =
+  return
+
+  CapsLock & g::
+    Send {Del} ; Delete char right
+    k1 =
     Marking =
-    }
-  else
-    Send +{End}{Del}  ; Delete to eol
-  k1 =
-  Marking =
-return
+  return
 
-CapsLock & z::
-  Send {WheelDown}  ; Scroll up
-  k1 =
-return
-
-$BS::
-  Send {BS}  ; Delete left char
-  k1 =
-  Marking =
-return
-
-!BS::
-  Send ^z  ; Undo
-  k1 =
-  Marking =
-return
-
-!+BS::
-  Send ^y  ; Redo
-  k1 =
-  Marking =
-return
-
-$Del::
-  Send {Del}  ; Delete char right
-  k1 =
-  Marking =
-return
-
-$Esc::
-  if Marking
+  ; Ctrl+h does backspace and ^k^h remove marking
+  CapsLock & h::
+    if k1
     {
-    Marking =
-    Send {Left}{Right}{Esc}
+      Marking =
+      Send {Right}
+      k1 =
     }
-else
-    Send {Esc}
-return
+  return
+
+  CapsLock & i::Send ^i
+
+  ; Ctrl+k prefix, ^k^k toggles marking
+  CapsLock & k::
+    if Marking
+    {
+      if k1
+      {
+        Marking =
+        Send {Left}{Right}
+        k1 =
+      }
+      else
+        k1 = 1
+    }
+    else
+    {
+      if k1
+      {
+        Marking = 1
+        k1 =
+      }
+      else
+        k1 = 1
+    }
+  return
+
+  CapsLock & l::
+    if GetKeyState("Shift") {
+      Send +{F3} ; Find previous
+    } else {
+      Send {F3} ; Find again
+    }
+    k1 =
+    Marking =
+  return
+
+  CapsLock & n::
+    Send {Enter}{Home}{Left} ; New line	; Home is for auto-indent editors
+    k1 =
+  return
+
+  ; next previous window
+  !p::Send +^{Tab}
+
+  CapsLock & p::
+    if k1
+      Send +{Ins} ; Edit paste
+    else
+      Send ^p ; Print
+    k1 =
+  return
+
+  ; dummy hotkey so that A_PriorHotKey can detect it
+  CapsLock & q::
+  return
+
+  CapsLock & r::
+    if A_PriorHotKey = CapsLock & q
+    {
+      if Marking
+        Send ^+{Home} ; Extend selection start of document
+      else
+        Send ^{Home} ; Start of document
+    }
+    else if Marking
+      Send +{PgUp} ; Extend selection page up
+    else
+      Send {PgUp} ; Page up
+    k1 =
+  return
+
+  CapsLock & s::
+    if k1
+      Send ^s ; File save
+    else if A_PriorHotKey = CapsLock & q
+    {
+      if Marking
+        Send +{Home} ; Extend selection start of line
+      else
+        Send {Home} ; Start of line
+    }
+    else if Marking
+      send +{Left} ; Extend selection left
+    else
+      Send {Left} ; Char left
+    k1 =
+  return
+
+  CapsLock & t::
+    Send ^+{Right}{Del} ; Delete word right
+    k1 =
+    Marking =
+  return
+
+  Capslock & u::
+    Send ^z ; Undo
+    k1 =
+    Marking =
+  return
+
+  CapsLock & BS::
+    Send ^+{Right}{Del} ; Delete word right
+    k1 =
+    Marking =
+  return
+
+  CapsLock & w::
+    Send {WheelUp} ; Scroll down
+    k1 =
+  return
+
+  CapsLock & x::
+    if k1 {
+      ;     Send !{F4}  ; Window close
+    } else if A_PriorHotKey = CapsLock & q
+      if Marking
+        Send +^{Down} ; Extend selection line down
+      else
+        Send ^{Down} ; Bottom of file
+    else if Marking
+      Send +{Down} ; Extend selection line down
+    else
+      Send {Down} ; Bottom of file
+    k1 =
+  return
+
+  ; exit all windows
+  !x::
+    Send !{F4} ; Window close
+    k1 =
+  return
+
+  CapsLock & y::
+    if k1
+    {
+      Send +{Del} ; Edit cut
+      Marking =
+    }
+    else
+      Send +{End}{Del} ; Delete to eol
+    k1 =
+    Marking =
+  return
+
+  CapsLock & z::
+    Send {WheelDown} ; Scroll up
+    k1 =
+  return
+
+  $BS::
+    Send {BS} ; Delete left char
+    k1 =
+    Marking =
+  return
+
+  !BS::
+    Send ^z ; Undo
+    k1 =
+    Marking =
+  return
+
+  !+BS::
+    Send ^y ; Redo
+    k1 =
+    Marking =
+  return
+
+  $Del::
+    Send {Del} ; Delete char right
+    k1 =
+    Marking =
+  return
+
+  $Esc::
+    if Marking
+    {
+      Marking =
+      Send {Left}{Right}{Esc}
+    }
+    else
+      Send {Esc}
+  return
+
+  ;; Generic binding of CapsLock to Backspace ;; and Control
+  ; *Capslock::SendInput,{Blind}{LCtrl DownR}
+  *Capslock up::
+    SendInput,{Blind}{LCtrl up}
+    if A_PriorKey = CapsLock
+      SendInput, {Backspace}
+  return
