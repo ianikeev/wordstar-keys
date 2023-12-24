@@ -908,6 +908,29 @@ GroupAdd,FindWindow,Find ahk_class #32770				; Notepad find window
       Send {Esc}
   return
 
+  ;; Bind CapsLock to some utility keys
+
+  ;; CapsLock + 1 to ¡
+  CapsLock & 1::
+    Send ¡
+    k1 =
+    Marking =
+  Return
+
+  ;; CapsLock + / to ¿
+  CapsLock & /::
+    Send ¿
+    k1 =
+    Marking =
+  Return
+
+  ;; CapsLock + - to —
+  CapsLock & -::
+    Send —
+    k1 =
+    Marking =
+  Return
+
   ;; Generic binding of CapsLock to Backspace ;; and Control
   ; *Capslock::SendInput,{Blind}{LCtrl DownR}
   *Capslock up::
